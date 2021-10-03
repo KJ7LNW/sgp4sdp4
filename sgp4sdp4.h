@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
+#include <ctype.h>
 
 /** Type definitions **/
 
@@ -57,6 +58,8 @@ typedef struct
   double
 	ds50;
 } deep_arg_t;
+
+#ifdef SGP4SDP4_CONSTANTS
 
 /** Table of constant values **/
 #define de2ra    1.74532925E-2   /* Degrees to Radians */
@@ -121,6 +124,8 @@ typedef struct
 /* Carriage return and line feed */
 #define CR  0x0A
 #define LF  0x0D
+
+#endif
 
 /* Flow control flag definitions */
 #define ALL_FLAGS              -1

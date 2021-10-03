@@ -7,6 +7,7 @@
 
 /* Ported to C by N. Kyriazis  April 6  2001 */
 
+#define SGP4SDP4_CONSTANTS
 #include "sgp4sdp4.h"
 
 /* Calculates the checksum mod 10 of a line from a TLE set and */
@@ -78,6 +79,11 @@ Good_Elements( char *tle_set )
 Convert_Satellite_Data( char *tle_set, tle_t *tle )
 {
   char buff[15];
+  int i;
+
+  /* Terminate white space on the right side of the name */
+  for (i = strlen(tle->sat_name)-1; i >= 0 && isspace(tle->sat_name[i]); i--)
+	  tle->sat_name[i] = 0;
 
   /** Decode Card 1 **/
   /* Satellite's catalogue number */
@@ -88,6 +94,8 @@ Convert_Satellite_Data( char *tle_set, tle_t *tle )
   /* International Designator for satellite */
   strncpy( tle->idesg, &tle_set[9],8 );
   tle->idesg[8] = '\0';
+  for (i = 7; i && isspace(tle->idesg[i]); i--)
+	  tle->idesg[i] = '\0';
 
   /* Satellite's epoch */
   strncpy( buff, &tle_set[18],14 );
@@ -171,9 +179,9 @@ Convert_Satellite_Data( char *tle_set, tle_t *tle )
   int
 Input_Tle_Set( char *tle_file, tle_t *tle)
 {
-  int idx,  /* Index for loops and arrays    */
-	  chr;  /* Used for inputting characters */
+  int chr;  /* Used for inputting characters */
 
+  char sat_name[80]; /* Temp var for satellite name */
   char tle_set[139]; /* Two lines of a TLE set */
 
   /* File pointer for opening TLE source file */
@@ -184,13 +192,9 @@ Input_Tle_Set( char *tle_file, tle_t *tle)
 	return(-1);
 
   /* Read the satellite's name */
-  idx = 0;
-  while( ((chr = fgetc(fp)) != ' ') && (chr != CR) && (chr != LF) )
-	tle->sat_name[idx++] = (char)chr;
-  /* Dump trailing spaces and CR/LF, put back last character */
-  while( ((chr = fgetc(fp)) == ' ') || (chr == CR) || (chr == LF) );
-  ungetc(chr,fp);
-  tle->sat_name[idx] = '\0';
+  fgets(sat_name, sizeof(sat_name), fp);
+  strncpy(tle->sat_name, sat_name, sizeof(tle->sat_name));
+  tle->sat_name[sizeof(tle->sat_name)-1] = 0;
 
   /* Read in first line of TLE set */
   fgets( tle_set, 70, fp );

@@ -19,6 +19,7 @@
  *   Ported to C by: Neoklis Kyriazis  April 9  2001
  */
 
+#define SGP4SDP4_CONSTANTS
 #include "sgp4sdp4.h"
 
 /* The function Julian_Date_of_Epoch returns the Julian Date of     */

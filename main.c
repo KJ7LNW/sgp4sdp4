@@ -9,6 +9,7 @@
  *  read the first TLE kep set, including line 0 with the Name.
  */
 
+#define SGP4SDP4_CONSTANTS
 #include "sgp4sdp4.h"
 
 /* Main program */

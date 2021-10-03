@@ -9,6 +9,7 @@
  *   ported to C by:  Neoklis Kyriazis  April 9 2001
  */
 
+#define SGP4SDP4_CONSTANTS
 #include "sgp4sdp4.h"
 
 /* Returns sign of a double */
