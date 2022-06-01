@@ -82,7 +82,7 @@ Convert_Satellite_Data( char *tle_set, tle_t *tle )
   int i;
 
   /* Terminate white space on the right side of the name */
-  for (i = strlen(tle->sat_name)-1; i >= 0 && isspace(tle->sat_name[i]); i--)
+  for (i = strlen(tle->sat_name)-1; i >= 0 && isspace((int)tle->sat_name[i]); i--)
 	  tle->sat_name[i] = 0;
 
   /** Decode Card 1 **/
@@ -94,7 +94,7 @@ Convert_Satellite_Data( char *tle_set, tle_t *tle )
   /* International Designator for satellite */
   strncpy( tle->idesg, &tle_set[9],8 );
   tle->idesg[8] = '\0';
-  for (i = 7; i && isspace(tle->idesg[i]); i--)
+  for (i = 7; i && isspace((int)tle->idesg[i]); i--)
 	  tle->idesg[i] = '\0';
 
   /* Satellite's epoch */
