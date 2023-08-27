@@ -93,9 +93,9 @@ DOY(int yr, int mo, int dy)
 /* Fraction_of_Day calculates the fraction of */
 /* a day passed at the specified input time.  */
   double
-Fraction_of_Day(int hr,int mi,int se)
+Fraction_of_Day(int hr,int mi,int se, suseconds_t usec)
 {
-  return( (hr + (mi + se/60.0)/60.0)/24.0 );
+  return( (hr + (mi + (se+usec*1e-6)/60.0)/60.0)/24.0 );
 } /*Function Fraction_of_Day*/
 
 /*------------------------------------------------------------------*/
@@ -178,13 +178,17 @@ Time_of_Day(double jd, struct tm *cdate)
 /* date and time to a Julian Date. The procedure Date_Time */
 /* performs the inverse of this function. */
   double
-Julian_Date(struct tm *cdate)
+Julian_Date(struct tm *cdate, struct timeval *tv)
 {
   double julian_date;
 
+  suseconds_t usec = 0;
+  if (tv != NULL)
+	  usec = tv->tv_usec;
+
   julian_date = Julian_Date_of_Year(cdate->tm_year) +
 	DOY(cdate->tm_year,cdate->tm_mon,cdate->tm_mday) +
-	Fraction_of_Day(cdate->tm_hour,cdate->tm_min,cdate->tm_sec)
+	Fraction_of_Day(cdate->tm_hour,cdate->tm_min,cdate->tm_sec,usec)
 	+ 5.787037e-06; /* Round up to nearest 1 sec */
 
   return( julian_date );
@@ -223,7 +227,7 @@ Check_Date(struct tm *cdate)
   double jt;
   struct tm chkdate;
 
-  jt = Julian_Date(cdate);
+  jt = Julian_Date(cdate, NULL);
   Date_Time(jt, &chkdate);
 
   if( (cdate->tm_year == chkdate.tm_year) &&
@@ -406,7 +410,7 @@ ThetaG_JD(double jd)
 
 /* Gets calendar time from time() and produces a UTC calendar date */
   void
-UTC_Calendar_Now( struct tm *cdate )
+UTC_Calendar_Now( struct tm *cdate, struct timeval *tv )
 {
   time_t t;
 
@@ -414,6 +418,9 @@ UTC_Calendar_Now( struct tm *cdate )
   *cdate = *gmtime(&t);
   cdate->tm_year += 1900;
   cdate->tm_mon += 1;
+
+  if (tv != NULL)
+	  gettimeofday(tv, NULL);
 
 } /* End UTC_Calendar_Now */
 /*------------------------------------------------------------------*/

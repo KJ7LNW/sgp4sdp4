@@ -42,6 +42,7 @@ main(void)
 
   /* Calendar date and time (UTC) */
   struct tm utc;
+  struct timeval tv;
 
   /* Satellite's predicted geodetic position */
   geodetic_t sat_geodetic;
@@ -112,8 +113,8 @@ main(void)
   do  /* Loop */
   {
 	/* Get UTC calendar and convert to Julian */
-	UTC_Calendar_Now(&utc);
-	jul_utc = Julian_Date(&utc);
+	UTC_Calendar_Now(&utc, &tv);
+	jul_utc = Julian_Date(&utc, &tv);
 
 	/* Convert satellite's epoch time to Julian  */
 	/* and calculate time since epoch in minutes */
@@ -186,7 +187,7 @@ main(void)
 		sat_status, eclipse_depth,
 		sun_azi, sun_ele);
 
-	sleep(1);
+	usleep(1e5);
   }  /* End of do */
   while( 1 );
 

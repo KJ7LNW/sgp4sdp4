@@ -10,6 +10,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
+#include <sys/time.h>
 #include <unistd.h>
 #include <ctype.h>
 
@@ -196,10 +197,10 @@ void Calculate_RADec(double time, vector_t *pos, vector_t *vel, geodetic_t *geod
 double Julian_Date_of_Epoch(double epoch);
 double Epoch_Time(double jd);
 int DOY(int yr, int mo, int dy);
-double Fraction_of_Day(int hr, int mi, int se);
+double Fraction_of_Day(int hr, int mi, int se, suseconds_t usec);
 void Calendar_Date(double jd, struct tm *cdate);
 void Time_of_Day(double jd, struct tm *cdate);
-double Julian_Date(struct tm *cdate);
+double Julian_Date(struct tm *cdate, struct timeval *tv);
 void Date_Time(double julian_date, struct tm *cdate);
 int Check_Date(struct tm *cdate);
 struct tm Time_to_UTC(struct tm *cdate);
@@ -210,7 +211,7 @@ double Delta_ET(double year);
 double Julian_Date_of_Year(double year);
 double ThetaG(double epoch, deep_arg_t *deep_arg);
 double ThetaG_JD(double jd);
-void UTC_Calendar_Now(struct tm *cdate);
+void UTC_Calendar_Now(struct tm *cdate, struct timeval *tv);
 /* solar.c */
 void Calculate_Solar_Position(double time, vector_t *solar_vector);
 int Sat_Eclipsed(vector_t *pos, vector_t *sol, double *depth);
