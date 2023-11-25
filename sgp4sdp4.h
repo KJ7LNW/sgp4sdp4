@@ -27,7 +27,7 @@ typedef struct
 	elset,  /* Element Set       */
 	revnum; /* Revolution Number */
   char
-	sat_name[25], /* Satellite name string    */
+	sat_name[128], /* Satellite name string    */
 	idesg[9];     /* International Designator */
 } tle_t;
 

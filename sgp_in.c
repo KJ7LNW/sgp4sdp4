@@ -181,7 +181,7 @@ Input_Tle_Set( char *tle_file, tle_t *tle)
 {
   int chr;  /* Used for inputting characters */
 
-  char sat_name[80]; /* Temp var for satellite name */
+  char sat_name[sizeof(tle->sat_name)]; /* Temp var for satellite name */
   char tle_set[139]; /* Two lines of a TLE set */
 
   /* File pointer for opening TLE source file */
